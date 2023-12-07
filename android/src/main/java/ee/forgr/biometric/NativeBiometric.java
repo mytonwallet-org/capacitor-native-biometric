@@ -14,7 +14,6 @@ import android.security.keystore.KeyProperties;
 import android.security.keystore.StrongBoxUnavailableException;
 import android.util.Base64;
 import androidx.activity.result.ActivityResult;
-import androidx.biometric.BiometricConstants;
 import androidx.biometric.BiometricManager;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -124,7 +123,7 @@ public class NativeBiometric extends Plugin {
     // @see https://developer.android.com/reference/androidx/biometric/BiometricManager#canAuthenticate(int)
     boolean fallbackAvailable = useFallback && this.deviceHasCredentials();
     if (useFallback && !fallbackAvailable) {
-      canAuthenticateResult = BiometricConstants.ERROR_NO_DEVICE_CREDENTIAL;
+      canAuthenticateResult = BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE;
     }
 
     boolean isAvailable =
@@ -496,6 +495,10 @@ public class NativeBiometric extends Plugin {
     KeyguardManager keyguardManager = (KeyguardManager) getActivity()
       .getSystemService(Context.KEYGUARD_SERVICE);
     // Can only use fallback if the device has a pin/pattern/password lockscreen.
-    return keyguardManager.isDeviceSecure();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      return keyguardManager.isDeviceSecure();
+    } else {
+      return keyguardManager.isKeyguardSecure();
+    }
   }
 }
