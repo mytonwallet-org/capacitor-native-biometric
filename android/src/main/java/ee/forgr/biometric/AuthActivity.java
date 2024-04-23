@@ -4,15 +4,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.biometric.BiometricConstants;
 import androidx.biometric.BiometricPrompt;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import ee.forgr.biometric.capacitornativebiometric.R;
 import java.util.concurrent.Executor;
 
@@ -136,29 +130,29 @@ public class AuthActivity extends AppCompatActivity {
    * Convert Auth Error Codes to plugin expected Biometric Auth Errors (in README.md)
    * This way both iOS and Android return the same error codes for the same authentication failure reasons.
    * !!IMPORTANT!!: Whenever this is modified, check if similar function in iOS Plugin.swift needs to be modified as well
-   * @see https://developer.android.com/reference/androidx/biometric/BiometricPrompt#constants
+   * @see <a href="https://developer.android.com/reference/androidx/biometric/BiometricPrompt#constants">...</a>
    * @return BiometricAuthError
    */
   public static int convertToPluginErrorCode(int errorCode) {
     switch (errorCode) {
-      case BiometricConstants.ERROR_HW_UNAVAILABLE:
-      case BiometricConstants.ERROR_HW_NOT_PRESENT:
+      case BiometricPrompt.ERROR_HW_UNAVAILABLE:
+      case BiometricPrompt.ERROR_HW_NOT_PRESENT:
         return 1;
-      case BiometricConstants.ERROR_LOCKOUT_PERMANENT:
+      case BiometricPrompt.ERROR_LOCKOUT_PERMANENT:
         return 2;
-      case BiometricConstants.ERROR_NO_BIOMETRICS:
+      case BiometricPrompt.ERROR_NO_BIOMETRICS:
         return 3;
-      case BiometricConstants.ERROR_LOCKOUT:
+      case BiometricPrompt.ERROR_LOCKOUT:
         return 4;
       // Authentication Failure (10) Handled by `onAuthenticationFailed`.
       // App Cancel (11), Invalid Context (12), and Not Interactive (13) are not valid error codes for Android.
-      case BiometricConstants.ERROR_NO_DEVICE_CREDENTIAL:
+      case BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL:
         return 14;
-      case BiometricConstants.ERROR_TIMEOUT:
-      case BiometricConstants.ERROR_CANCELED:
+      case BiometricPrompt.ERROR_TIMEOUT:
+      case BiometricPrompt.ERROR_CANCELED:
         return 15;
-      case BiometricConstants.ERROR_USER_CANCELED:
-      case BiometricConstants.ERROR_NEGATIVE_BUTTON:
+      case BiometricPrompt.ERROR_USER_CANCELED:
+      case BiometricPrompt.ERROR_NEGATIVE_BUTTON:
         return 16;
       default:
         return 0;
