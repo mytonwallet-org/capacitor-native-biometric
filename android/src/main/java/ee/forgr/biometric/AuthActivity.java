@@ -26,31 +26,31 @@ public class AuthActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       executor = this.getMainExecutor();
     } else {
-      executor =
-        new Executor() {
-          @Override
-          public void execute(Runnable command) {
-            new Handler().post(command);
-          }
-        };
+      executor = new Executor() {
+        @Override
+        public void execute(Runnable command) {
+          new Handler().post(command);
+        }
+      };
     }
 
-    BiometricPrompt.PromptInfo.Builder builder = new BiometricPrompt.PromptInfo.Builder()
-      .setTitle(
-        getIntent().hasExtra("title")
-          ? getIntent().getStringExtra("title")
-          : "Authenticate"
-      )
-      .setSubtitle(
-        getIntent().hasExtra("subtitle")
-          ? getIntent().getStringExtra("subtitle")
-          : null
-      )
-      .setDescription(
-        getIntent().hasExtra("description")
-          ? getIntent().getStringExtra("description")
-          : null
-      );
+    BiometricPrompt.PromptInfo.Builder builder =
+      new BiometricPrompt.PromptInfo.Builder()
+        .setTitle(
+          getIntent().hasExtra("title")
+            ? getIntent().getStringExtra("title")
+            : "Authenticate"
+        )
+        .setSubtitle(
+          getIntent().hasExtra("subtitle")
+            ? getIntent().getStringExtra("subtitle")
+            : null
+        )
+        .setDescription(
+          getIntent().hasExtra("description")
+            ? getIntent().getStringExtra("description")
+            : null
+        );
 
     boolean useFallback = getIntent().getBooleanExtra("useFallback", false);
 

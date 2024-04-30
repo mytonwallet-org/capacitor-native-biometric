@@ -127,10 +127,8 @@ public class NativeBiometric extends Plugin {
     }
 
     boolean isAvailable =
-      (
-        canAuthenticateResult == BiometricManager.BIOMETRIC_SUCCESS ||
-        fallbackAvailable
-      );
+      (canAuthenticateResult == BiometricManager.BIOMETRIC_SUCCESS ||
+        fallbackAvailable);
     ret.put("isAvailable", isAvailable);
 
     if (!isAvailable) {
@@ -365,13 +363,14 @@ public class NativeBiometric extends Plugin {
         KeyProperties.KEY_ALGORITHM_AES,
         ANDROID_KEY_STORE
       );
-      KeyGenParameterSpec.Builder paramBuilder = new KeyGenParameterSpec.Builder(
-        KEY_ALIAS,
-        KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT
-      )
-        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-        .setRandomizedEncryptionRequired(false);
+      KeyGenParameterSpec.Builder paramBuilder =
+        new KeyGenParameterSpec.Builder(
+          KEY_ALIAS,
+          KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT
+        )
+          .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+          .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+          .setRandomizedEncryptionRequired(false);
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         paramBuilder.setUnlockedDeviceRequired(true);
@@ -387,8 +386,8 @@ public class NativeBiometric extends Plugin {
 
   private Key getKey(String KEY_ALIAS)
     throws GeneralSecurityException, IOException {
-    KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) getKeyStore()
-      .getEntry(KEY_ALIAS, null);
+    KeyStore.SecretKeyEntry secretKeyEntry =
+      (KeyStore.SecretKeyEntry) getKeyStore().getEntry(KEY_ALIAS, null);
     if (secretKeyEntry != null) {
       return secretKeyEntry.getSecretKey();
     }
@@ -428,8 +427,8 @@ public class NativeBiometric extends Plugin {
 
   private KeyStore.PrivateKeyEntry getPrivateKeyEntry(String KEY_ALIAS)
     throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertificateException, KeyStoreException, IOException, UnrecoverableEntryException {
-    KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) getKeyStore()
-      .getEntry(KEY_ALIAS, null);
+    KeyStore.PrivateKeyEntry privateKeyEntry =
+      (KeyStore.PrivateKeyEntry) getKeyStore().getEntry(KEY_ALIAS, null);
 
     if (privateKeyEntry == null) {
       KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
