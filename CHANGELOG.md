@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/Cap-go/capacitor-native-biometric/compare/5.1.1...6.0.0) (2024-04-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* capacitor 6
+
+### Features
+
+* capacitor 6 ([cfe94d5](https://github.com/Cap-go/capacitor-native-biometric/commit/cfe94d5e5b63fbef5bcb41174502bb4b97eb6c74))
+
 ### [5.1.1](https://github.com/Cap-go/capacitor-native-biometric/compare/5.1.0...5.1.1) (2024-04-23)
 
 ## 5.1.0 (2023-09-12)
