@@ -68,44 +68,15 @@ public class NativeBiometric extends Plugin {
 
   private SharedPreferences encryptedSharedPreferences;
 
+  private static final boolean allowDeviceCredentials = true;
   private int getAvailableFeature() {
-    // default to none
-    int type = NONE;
-
-    // if has fingerprint
-    if (
-      getContext()
-        .getPackageManager()
-        .hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
-    ) {
-      type = FINGERPRINT;
+    if (allowDeviceCredentials && !isCurrentSDK29OrEarlier()) {
+      return BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
     }
-
-    // if has face auth
-    if (
-      getContext()
-        .getPackageManager()
-        .hasSystemFeature(PackageManager.FEATURE_FACE)
-    ) {
-      // if also has fingerprint
-      if (type != NONE) return MULTIPLE;
-
-      type = FACE_AUTHENTICATION;
-    }
-
-    // if has iris auth
-    if (
-      getContext()
-        .getPackageManager()
-        .hasSystemFeature(PackageManager.FEATURE_IRIS)
-    ) {
-      // if also has fingerprint or face auth
-      if (type != NONE) return MULTIPLE;
-
-      type = IRIS_AUTHENTICATION;
-    }
-
-    return type;
+    return BiometricManager.Authenticators.BIOMETRIC_STRONG;
+  }
+  private boolean isCurrentSDK29OrEarlier() {
+    return Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q;
   }
 
   @PluginMethod
