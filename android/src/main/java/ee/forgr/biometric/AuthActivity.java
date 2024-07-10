@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import ee.forgr.biometric.capacitornativebiometric.R;
 import java.util.concurrent.Executor;
@@ -36,6 +37,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     BiometricPrompt.PromptInfo.Builder builder = new BiometricPrompt.PromptInfo.Builder()
+      .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
       .setTitle(
         getIntent().hasExtra("title")
           ? getIntent().getStringExtra("title")
