@@ -25,6 +25,12 @@ export interface IsAvailableOptions {
    * Specifies if should fallback to passcode authentication if biometric authentication is not available.
    */
   useFallback: boolean;
+  /**
+   * Only for Android.
+   * Set true, if the application already has active biometric authentication.
+   * This will allow the weak-authentication to prevent issues after updating application to newer versions.
+   */
+  isWeakAuthenticatorAllowed?: boolean;
 }
 
 export interface AvailableResult {
@@ -55,6 +61,12 @@ export interface BiometricOptions {
    * @default 1
    */
   maxAttempts?: number;
+  /**
+   * Only for Android.
+   * Set true, if the application already has active biometric authentication.
+   * This will allow the weak-authentication to prevent issues after updating application to newer versions.
+   */
+  isWeakAuthenticatorAllowed?: boolean;
 }
 
 export interface GetCredentialOptions {
