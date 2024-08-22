@@ -36,8 +36,14 @@ public class AuthActivity extends AppCompatActivity {
         };
     }
 
+    boolean isWeakAuthenticatorAllowed = getIntent().getBooleanExtra("isWeakAuthenticatorAllowed", false);
+
+    int allowedAuthenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG;
+    if (isWeakAuthenticatorAllowed)
+      allowedAuthenticators = allowedAuthenticators | BiometricManager.Authenticators.BIOMETRIC_WEAK;
+
     BiometricPrompt.PromptInfo.Builder builder = new BiometricPrompt.PromptInfo.Builder()
-      .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+      .setAllowedAuthenticators(allowedAuthenticators)
       .setTitle(
         getIntent().hasExtra("title")
           ? getIntent().getStringExtra("title")

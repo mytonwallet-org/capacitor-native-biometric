@@ -116,8 +116,16 @@ public class NativeBiometric extends Plugin {
       call.getBoolean("useFallback", false)
     );
 
+    boolean isWeakAuthenticatorAllowed = Boolean.TRUE.equals(
+            call.getBoolean("isWeakAuthenticatorAllowed", false)
+    );
+
+    int allowedAuthenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG;
+    if (isWeakAuthenticatorAllowed)
+      allowedAuthenticators = allowedAuthenticators | BiometricManager.Authenticators.BIOMETRIC_WEAK;
+
     BiometricManager biometricManager = BiometricManager.from(getContext());
-    int canAuthenticateResult = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
+    int canAuthenticateResult = biometricManager.canAuthenticate(allowedAuthenticators);
     // Using deviceHasCredentials instead of canAuthenticate(DEVICE_CREDENTIAL)
     // > "Developers that wish to check for the presence of a PIN, pattern, or password on these versions should instead use isDeviceSecure."
     // @see https://developer.android.com/reference/androidx/biometric/BiometricManager#canAuthenticate(int)
@@ -178,6 +186,10 @@ public class NativeBiometric extends Plugin {
     }
 
     intent.putExtra("useFallback", useFallback);
+
+    if (call.hasOption("isWeakAuthenticatorAllowed")) {
+      intent.putExtra("isWeakAuthenticatorAllowed", call.getBoolean("isWeakAuthenticatorAllowed"));
+    }
 
     startActivityForResult(call, intent, "verifyResult");
   }
