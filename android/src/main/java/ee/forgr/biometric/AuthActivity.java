@@ -16,6 +16,7 @@ public class AuthActivity extends AppCompatActivity {
   private Executor executor;
   private int maxAttempts;
   private int counter = 0;
+  private BiometricPrompt biometricPrompt;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class AuthActivity extends AppCompatActivity {
 
     BiometricPrompt.PromptInfo promptInfo = builder.build();
 
-    BiometricPrompt biometricPrompt = new BiometricPrompt(
+    biometricPrompt = new BiometricPrompt(
       this,
       executor,
       new BiometricPrompt.AuthenticationCallback() {
@@ -105,11 +106,14 @@ public class AuthActivity extends AppCompatActivity {
         public void onAuthenticationFailed() {
           super.onAuthenticationFailed();
           counter++;
-          if (counter == maxAttempts) finishActivity(
-            "failed",
-            10,
-            "Authentication failed."
-          );
+          if (counter == maxAttempts) {
+            biometricPrompt.cancelAuthentication();
+            finishActivity(
+              "failed",
+              10,
+              "Authentication failed."
+            );
+          }
         }
       }
     );
