@@ -97,10 +97,6 @@ public class NativeBiometric extends Plugin {
   public void isAvailable(PluginCall call) {
     JSObject ret = new JSObject();
 
-    boolean useFallback = Boolean.TRUE.equals(
-      call.getBoolean("useFallback", false)
-    );
-
     boolean isWeakAuthenticatorAllowed = Boolean.TRUE.equals(
       call.getBoolean("isWeakAuthenticatorAllowed", false)
     );
@@ -111,19 +107,9 @@ public class NativeBiometric extends Plugin {
 
     BiometricManager biometricManager = BiometricManager.from(getContext());
     int canAuthenticateResult = biometricManager.canAuthenticate(allowedAuthenticators);
-    // Using deviceHasCredentials instead of canAuthenticate(DEVICE_CREDENTIAL)
-    // > "Developers that wish to check for the presence of a PIN, pattern, or password on these versions should instead use isDeviceSecure."
-    // @see https://developer.android.com/reference/androidx/biometric/BiometricManager#canAuthenticate(int)
-    boolean fallbackAvailable = useFallback && this.deviceHasCredentials();
-    if (useFallback && !fallbackAvailable) {
-      canAuthenticateResult = BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE;
-    }
-
-    boolean isAvailable =
-      (
-        canAuthenticateResult == BiometricManager.BIOMETRIC_SUCCESS ||
-          fallbackAvailable
-      );
+    // `useFallback` is intentionally ignored on Android to enforce
+    // CryptoObject-based biometric verification in AuthActivity.
+    boolean isAvailable = canAuthenticateResult == BiometricManager.BIOMETRIC_SUCCESS;
     ret.put("isAvailable", isAvailable);
 
     if (!isAvailable) {
@@ -163,14 +149,7 @@ public class NativeBiometric extends Plugin {
       intent.putExtra("maxAttempts", call.getInt("maxAttempts"));
     }
 
-    boolean useFallback = Boolean.TRUE.equals(
-      call.getBoolean("useFallback", false)
-    );
-    if (useFallback) {
-      useFallback = this.deviceHasCredentials();
-    }
-
-    intent.putExtra("useFallback", useFallback);
+    // `useFallback` is intentionally ignored on Android for security.
 
     if (call.hasOption("isWeakAuthenticatorAllowed")) {
       intent.putExtra("isWeakAuthenticatorAllowed", call.getBoolean("isWeakAuthenticatorAllowed"));
@@ -204,14 +183,7 @@ public class NativeBiometric extends Plugin {
       intent.putExtra("maxAttempts", call.getInt("maxAttempts"));
     }
 
-    boolean useFallback = Boolean.TRUE.equals(
-      call.getBoolean("useFallback", false)
-    );
-    if (useFallback) {
-      useFallback = this.deviceHasCredentials();
-    }
-
-    intent.putExtra("useFallback", useFallback);
+    // `useFallback` is intentionally ignored on Android for security.
 
     if (call.hasOption("isWeakAuthenticatorAllowed")) {
       intent.putExtra("isWeakAuthenticatorAllowed", call.getBoolean("isWeakAuthenticatorAllowed"));
