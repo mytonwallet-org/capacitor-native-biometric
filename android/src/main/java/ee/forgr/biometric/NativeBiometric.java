@@ -176,7 +176,11 @@ public class NativeBiometric extends Plugin {
       intent.putExtra("isWeakAuthenticatorAllowed", call.getBoolean("isWeakAuthenticatorAllowed"));
     }
 
-    startActivityForResult(call, intent, "verifyResult");
+    try {
+      startActivityForResult(call, intent, "verifyResult");
+    } catch (IllegalStateException e) {
+      call.reject("Biometric launcher not ready", e);
+    }
   }
 
   @PluginMethod
@@ -217,7 +221,11 @@ public class NativeBiometric extends Plugin {
       intent.putExtra("isWeakAuthenticatorAllowed", call.getBoolean("isWeakAuthenticatorAllowed"));
     }
 
-    startActivityForResult(call, intent, "verifyIdentityAndGetCredentialsResult");
+    try {
+      startActivityForResult(call, intent, "verifyIdentityAndGetCredentialsResult");
+    } catch (IllegalStateException e) {
+      call.reject("Biometric launcher not ready", e);
+    }
   }
 
   @PluginMethod
